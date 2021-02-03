@@ -14,5 +14,8 @@
   "license": "ISC",
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.10"
+  },
+  "dependencies": {
+    "eth-rpc-errors": "^4.0.2"
   }
 }

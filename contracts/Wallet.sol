@@ -37,7 +37,7 @@ contract Wallet {
         ));
     }
     
-    function approveTransfer(uint id) external onlyApprover {
+    function approveTransfer(uint id) external onlyApprover payable {
         require(transfers[id].sent == false, 'transfer has already be sent');
         require(approvals[msg.sender][id] == false, 'cannot approve transfer twice');
         
