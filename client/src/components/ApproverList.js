@@ -1,14 +1,14 @@
 import React from 'react';
 
-function Header({approvers, quorum}) {
+function ApproverList({approvers, quorum}) {
     return (
-        <header>
+        <div>
             <ul>
                 <li>Approvers: { approvers.join(', ') }</li>
                 <li>Quorum: { quorum }</li>
             </ul>
-        </header>
+        </div>
     )
 }
 
-export default Header;
+export default ApproverList;

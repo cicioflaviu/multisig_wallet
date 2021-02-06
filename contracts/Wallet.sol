@@ -27,27 +27,26 @@ contract Wallet {
         return transfers;
     }
     
-    function createTransfer(uint amount, address payable to) external onlyApprover {
+    function createTransfer(uint amount, address payable to) external onlyApprover() {
         transfers.push(Transfer(
-          transfers.length,
-          amount,
-          to,
-          0,
-          false
+            transfers.length,
+            amount,
+            to,
+            0,
+            false
         ));
     }
     
-    function approveTransfer(uint id) external onlyApprover payable {
-        require(transfers[id].sent == false, 'transfer has already be sent');
+    function approveTransfer(uint id) external onlyApprover() {
+        require(transfers[id].sent == false, 'transfer has already been sent');
         require(approvals[msg.sender][id] == false, 'cannot approve transfer twice');
         
-        approvals[msg.sender][id] == true;
+        approvals[msg.sender][id] = true;
         transfers[id].approvals++;
         
         if(transfers[id].approvals >= quorum) {
             transfers[id].sent = true;
-            
-            address payable to  = transfers[id].to;
+            address payable to = transfers[id].to;
             uint amount = transfers[id].amount;
             to.transfer(amount);
         }
@@ -62,7 +61,6 @@ contract Wallet {
                 allowed = true;
             }
         }
-        
         require(allowed == true, 'only approver allowed');
         _;
     }

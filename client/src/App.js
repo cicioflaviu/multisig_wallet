@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getWeb3, getWallet } from './utils.js';
-import Header from './Header.js';
-import NewTransfer from './NewTransfer.js';
-import TransferList from './TransferList.js';
+import ApproverList from './components/ApproverList.js';
+import NewTransfer from './components/NewTransfer.js';
+import TransferList from './components/TransferList.js';
+import Header from './components/Header.js';
 
 function App() {
   const [web3, setWeb3] = useState(undefined);
@@ -30,24 +31,18 @@ function App() {
     init();
   }, []);
 
-  if(
-      typeof web3 === 'undefined'
-      || typeof accounts === 'undefined'
-      || typeof wallet === 'undefined'
-      || typeof quorum === 'undefined'
-      || approvers.length === 0
-  ) {
-    return <div>Loading...</div>
-  }
+  const isConnected =  !(typeof web3 === 'undefined'
+                      || typeof accounts === 'undefined'
+                      || typeof wallet === 'undefined'
+                      || typeof quorum === 'undefined'
+                      || approvers.length === 0)
 
   const refreshTransfers = async () => {
-    console.log("REFRESH")
     const transfers = await wallet.methods.getTransfers().call();
     setTransfers(transfers);
   }
 
   const createTransfer = async transfer => {
-    console.log(transfer)
     await wallet.methods
       .createTransfer(transfer.amount, transfer.to)
       .send({from: accounts[0], gas: 1000000});
@@ -55,20 +50,19 @@ function App() {
   }
 
   const approveTransfer = async transferId => {
-    console.log(accounts[0])
-    console.log(await wallet.methods
+    await wallet.methods
       .approveTransfer(transferId)
-      .send({from: accounts[0], gas: 1000000}));
+      .send({from: accounts[0], gas: 1000000});
     refreshTransfers();
   }
 
   return (
-    <div className="App">
-      MultiSig Wallet
-      <Header approvers = {approvers} quorum = {quorum}/>
+    <React.Fragment>
+      <Header isConnected={isConnected}/>
+      <ApproverList approvers = {approvers} quorum = {quorum}/>
       <NewTransfer createTransfer = {createTransfer} />
       <TransferList transfers = {transfers} approveTransfer = {approveTransfer} />
-    </div>
+    </React.Fragment>
   );
 }
 
