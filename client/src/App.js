@@ -4,6 +4,19 @@ import ApproverList from './components/ApproverList.js';
 import NewTransfer from './components/NewTransfer.js';
 import TransferList from './components/TransferList.js';
 import Header from './components/Header.js';
+import Navigation from './components/Navigation.js';
+import { CssBaseline, makeStyles, Toolbar } from '@material-ui/core';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  content: {
+    flexGrow: 1
+  },
+}));
+
 
 function App() {
   const [web3, setWeb3] = useState(undefined);
@@ -42,6 +55,8 @@ function App() {
     setTransfers(transfers);
   }
 
+  const classes = useStyles();
+
   const createTransfer = async transfer => {
     await wallet.methods
       .createTransfer(transfer.amount, transfer.to)
@@ -56,12 +71,45 @@ function App() {
     refreshTransfers();
   }
 
+  let transactionsPage;
+  if(isConnected) {
+    transactionsPage = <div className={classes.content}>
+        <Toolbar />
+        {/* <ApproverList approvers = {approvers} quorum = {quorum}/>  */}
+        {/* <NewTransfer createTransfer = {createTransfer} />  */}
+        <TransferList transfers = {transfers} approveTransfer = {approveTransfer} />
+      </div>
+  } else {
+    transactionsPage = <div></div>
+  }
+
   return (
     <React.Fragment>
-      <Header isConnected={isConnected}/>
-      <ApproverList approvers = {approvers} quorum = {quorum}/>
-      <NewTransfer createTransfer = {createTransfer} />
-      <TransferList transfers = {transfers} approveTransfer = {approveTransfer} />
+      <div className={classes.root}>
+        <Header isConnected={isConnected}/>
+        
+        <Router>
+          <Navigation/>
+          <Switch>
+
+            <Route exact path="/">
+              {transactionsPage}
+            </Route>
+
+            <Route exact path="/approvers">
+              <ApproverList approvers = {approvers} quorum = {quorum}/>
+            </Route>
+
+            <Route exact path="/send">
+              <NewTransfer createTransfer = {createTransfer} />
+            </Route>
+
+            <Route exact path="/receive">
+            </Route>
+
+          </Switch>
+        </Router>
+      </div>
     </React.Fragment>
   );
 }

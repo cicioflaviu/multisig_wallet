@@ -16,6 +16,7 @@
     "@openzeppelin/test-helpers": "^0.5.10"
   },
   "dependencies": {
-    "eth-rpc-errors": "^4.0.2"
+    "eth-rpc-errors": "^4.0.2",
+    "react-router-dom": "^5.2.0"
   }
 }
