@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Navigation() {
+export default function Navigation(props) {
   const classes = useStyles();
 
   return (
@@ -58,7 +58,7 @@ export default function Navigation() {
             </ListItem>
           </Link>
 
-          <Link to="/approvers" className={classes.link}>
+          <Link to="/approvers" className={classes.link} disabled>
             <ListItem button>
               <ListItemIcon>
                 <CheckBoxOutlinedIcon color="secondary" />

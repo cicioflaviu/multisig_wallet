@@ -6,15 +6,18 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   approvesContainer: {
-    paddingTop: "30px",
+    paddingTop: '30px',
   },
   divider: {
+    background: theme.palette.secondary.main
+  },
+  approversDivider: {
     background: theme.palette.secondary.main,
+    margin: "15px"
   },
 }));
 
@@ -31,7 +34,9 @@ function ApproverList({ approvers, quorum }) {
   approverList.forEach((approver, index) => {
     listItemsWithDividers.push(approver);
     if (approverList[index + 1] !== undefined) {
-      listItemsWithDividers.push(<MoreVertIcon color="secondary" />);
+      listItemsWithDividers.push(
+        <Divider variant="middle" className={classes.approversDivider} width="10%" />
+      );
     }
   });
 
