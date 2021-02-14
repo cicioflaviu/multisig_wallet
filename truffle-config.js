@@ -1,4 +1,10 @@
 const path = require('path');
+const fs = require('fs');
+const provider = require('@truffle/hdwallet-provider');
+
+const secrets = JSON.parse(
+  fs.readFileSync('.secrets.json').toString().trim()
+);
 
 /**
  * Use this file to configure your truffle project. It's seeded with some
@@ -76,6 +82,16 @@ module.exports = {
     // network_id: 2111,   // This network is yours, in the cloud.
     // production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    kovan: {
+      provider: () => 
+        new provider(
+          secrets.privateKeys,
+          secrets.projectLink,
+          0,
+          3
+        ),
+        network_id: 42
+    }
   },
 
   // Set default mocha options here, use special reporters etc.
