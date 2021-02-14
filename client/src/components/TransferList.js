@@ -92,6 +92,7 @@ function TransferList({ transfers, approveTransfer }) {
                   size="small"
                   color="secondary"
                   onClick={() => approveTransfer(transfer.id)}
+                  disabled={transfer.sent}
                 >
                   Approve
                 </Button>
